@@ -4,11 +4,22 @@ import { Modal, Button, Form, Input, Select, InputNumber } from 'antd';
 export class FormModal extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      age: 0,
+      firstName: '',
+      lastName: '',
+      email: '',
+      gender: '',
+    };
   }
   render() {
     const { visible, handleCancel } = this.props;
-    // const {} = props;
+    const {
+      name: { first, last },
+      email,
+      dob: { age },
+      gender,
+    } = this.props.formData;
     return (
       <>
         <Modal
@@ -28,22 +39,22 @@ export class FormModal extends React.Component {
             onValuesChange={this.valuesChange}
           >
             <Form.Item label="First Name">
-              <Input onChange={this.firstName} />
+              <Input onChange={this.firstName} value={first || ''} />
             </Form.Item>
             <Form.Item label="Last Name">
-              <Input onChange={this.lastName} />
+              <Input onChange={this.lastName} value={last || ''} />
             </Form.Item>
             <Form.Item label="Age">
-              <InputNumber onChange={this.age} />
+              <InputNumber onChange={this.age} value={age || 0} />
             </Form.Item>
             <Form.Item label="Gender">
-              <Select onChange={this.gender}>
+              <Select onChange={this.gender} value={gender || ''}>
                 <Select.Option value="female">Female</Select.Option>
                 <Select.Option value="male">Male</Select.Option>
               </Select>
             </Form.Item>
             <Form.Item label="Email">
-              <Input onChange={this.email} />
+              <Input onChange={this.email} value={email || ''} />
             </Form.Item>
             <Form.Item
               wrapperCol={{
@@ -60,14 +71,4 @@ export class FormModal extends React.Component {
       </>
     );
   }
-
-  submit = () => {};
-
-  age = (e) => {
-    console.log(e);
-  };
-
-  gender = (e) => {
-    console.log('gender', e);
-  };
 }
