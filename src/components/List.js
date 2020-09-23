@@ -101,7 +101,7 @@ class EmployeeList extends React.Component {
               span: 5,
             }}
             wrapperCol={{
-              span: 18,
+              span: 16,
             }}
             layout="horizontal"
             onValuesChange={this.valuesChange}

@@ -1,12 +1,21 @@
 import React from 'react';
 import './App.css';
 import EmployeeList from './components/List';
+import { Layout } from 'antd';
+
+const { Header, Sider, Content, Footer } = Layout;
 
 function App() {
   return (
-    <div className="App">
-      <EmployeeList />
-    </div>
+    <Layout>
+      <Header>Header</Header>
+      <Layout>
+        <Sider>Sider</Sider>
+        <Content className="App">
+          <EmployeeList />
+        </Content>
+      </Layout>
+    </Layout>
   );
 }
 
