@@ -17,7 +17,9 @@ class EmployeeList extends React.Component {
     initLoading: true,
     loading: false,
     list: [],
-    showModal: true,
+    showModal: false,
+    insert: true,
+    editIdx: -1,
     current: {
       name: {
         last: '',
@@ -59,7 +61,7 @@ class EmployeeList extends React.Component {
                 <Button
                   type="primary"
                   onClick={() => {
-                    this.edit(item);
+                    this.edit(item, idx);
                   }}
                 >
                   Edit
@@ -105,22 +107,47 @@ class EmployeeList extends React.Component {
             onValuesChange={this.valuesChange}
           >
             <Form.Item label="First Name">
-              <Input onChange={this.firstName} />
+              <Input
+                onChange={(e) => {
+                  this.firstName(e);
+                }}
+                value={this.state.current.name.first}
+              />
             </Form.Item>
             <Form.Item label="Last Name">
-              <Input onChange={this.lastName} />
+              <Input
+                onChange={(e) => {
+                  this.lastName(e);
+                }}
+                value={this.state.current.name.last}
+              />
             </Form.Item>
             <Form.Item label="Age">
-              <InputNumber onChange={this.age} />
+              <InputNumber
+                onChange={(e) => {
+                  this.age(e);
+                }}
+                value={this.state.current.dob.age}
+              />
             </Form.Item>
             <Form.Item label="Gender">
-              <Select onChange={this.gender}>
+              <Select
+                onChange={(e) => {
+                  this.gender(e);
+                }}
+                value={this.state.current.gender}
+              >
                 <Select.Option value="female">Female</Select.Option>
                 <Select.Option value="male">Male</Select.Option>
               </Select>
             </Form.Item>
             <Form.Item label="Email">
-              <Input onChange={this.email} />
+              <Input
+                onChange={(e) => {
+                  this.email(e);
+                }}
+                value={this.state.current.email}
+              />
             </Form.Item>
             <Form.Item
               wrapperCol={{
@@ -139,9 +166,10 @@ class EmployeeList extends React.Component {
   }
 
   add = () => {
-    this.setState({
+    this.setState(() => ({
       showModal: true,
-    });
+      insert: true,
+    }));
   };
 
   delete = (idx) => {
@@ -150,22 +178,17 @@ class EmployeeList extends React.Component {
     this.setState(() => ({ list }));
   };
 
-  edit = (item) => {
-    console.log(item);
-    this.setState({
+  edit = (item, idx) => {
+    this.setState(() => ({
       showModal: true,
       current: item,
-    });
+      insert: false,
+      editIdx: idx,
+    }));
   };
 
   handleCancel = () => {
-    this.setState({ showModal: false });
-  };
-
-  submit = () => {
-    const { list } = this.state;
     let { current } = this.state;
-    list.push(current);
 
     current = {
       name: {
@@ -176,12 +199,49 @@ class EmployeeList extends React.Component {
       gender: '',
       dob: { age: 0 },
     };
+    this.setState({ showModal: false, current });
+  };
 
-    this.setState({
-      list,
-      current,
-      showModal: false,
-    });
+  submit = () => {
+    if (this.state.insert) {
+      const { list } = this.state;
+      let { current } = this.state;
+      list.push(current);
+
+      current = {
+        name: {
+          last: '',
+          first: '',
+        },
+        email: '',
+        gender: '',
+        dob: { age: 0 },
+      };
+
+      this.setState({
+        list,
+        current,
+        showModal: false,
+      });
+    } else {
+      const { list, editIdx } = this.state;
+      let { current } = this.state;
+      list[editIdx] = current;
+      current = {
+        name: {
+          last: '',
+          first: '',
+        },
+        email: '',
+        gender: '',
+        dob: { age: 0 },
+      };
+      this.setState({
+        list,
+        showModal: false,
+        current,
+      });
+    }
   };
 
   age = (e) => {
